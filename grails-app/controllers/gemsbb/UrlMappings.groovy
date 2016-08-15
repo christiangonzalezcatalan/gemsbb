@@ -9,7 +9,7 @@ class UrlMappings {
             }
         }
 
-        "/projects"(resources:'project')
+        "/proyectos"(resources:'proyecto')
 
         "/"(controller: 'application', action:'index')
         "500"(view: '/error')
