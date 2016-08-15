@@ -5,10 +5,10 @@ import grails.rest.*
 
 @Resource(readOnly = false, formats = ['json', 'xml'])
 class Tarea {
+    String nombre
     Date fechaInicio
     Date fechaFin
     String estado
-    Miembro responsable
     static hasOne = [responsable: Miembro]
     static hasMany = [colaboradores: Miembro]
 
@@ -17,5 +17,9 @@ class Tarea {
         fechaFin nullable: false
         estado nullable: false
         responsable nullable: false
+    }
+
+    static mapping = {
+        version false
     }
 }
