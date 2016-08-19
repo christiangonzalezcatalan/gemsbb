@@ -67,7 +67,7 @@ class RedmineInjectorServiceSpec extends Specification {
                 .withPath("/planes")
                 //.withBody("{username: 'foo', password: 'bar'}")
                 ,
-            VerificationTimes.exactly(3)
+            VerificationTimes.exactly(1)
         );
     }
 

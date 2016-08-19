@@ -12,34 +12,34 @@ class RedmineInjectorService {
         //def resp = restClient.get("http://10.0.2.2:3000/issues.json?project_id=3")
         def resp = restClient.get("http://localhost:8081/issues.json?project_id=3")
         JSONObject result = resp.json
-        result.issues.each {
-            println it.project.name
-            println "${it.status.name} ${it.tracker.name}. ${it.subject}: ${it.description}"
+        if(result.issues.size() > 0) {
+            def firstIssue = result.issues[0]
+            println firstIssue.project.name
+            println "${firstIssue.status.name} ${firstIssue.tracker.name}. ${firstIssue.subject}: ${firstIssue.description}"
+            println firstIssue
+
+            def listTareas = []
+
+            result.issues.each {
+                def issue = it
+                listTareas.add({
+                    nombre = "Tarea 1"
+                    fechaInicio = Date.parse('yyyy-MM-dd', issue.start_date)
+                    fechaFin = Date.parse('yyyy-MM-dd', issue.due_date)
+                    estado = issue.status.name
+                    responsable = "57b135d78acec62754906455"
+                    colaboradores = ["57b135d78acec62754906455"]
+                })
+            }
+
             def rpost = restClient.post("http://localhost:8081/planes") {
                 contentType "application/json"
                 json {
                     proyecto = "57b110c58acec622e7c43944"
-                    tareas = [
-                        {
-                            nombre = "Tarea 1"
-                            fechaInicio = "2016-08-16 10:00:20.0"
-                            fechaFin = "2016-08-16 18:00:20.0"
-                            estado = "Mi estado"
-                            responsable = "57b135d78acec62754906455"
-                            colaboradores = ["57b135d78acec62754906455"]
-                        },
-                        {
-                            nombre = "Tarea 2"
-                            fechaInicio = "2016-08-16 10:00:20.0"
-                            fechaFin = "2016-08-20 10:00:20.0"
-                            estado = "Mi estado"
-                            responsable = "57b135d78acec62754906455"
-                            colaboradores = []
-                        }
-                    ]
+                    tareas = listTareas
                 }
             }
-            if(rpost.getStatusCode() != HttpStatus.OK) {
+            if (rpost.getStatusCode() != HttpStatus.OK) {
                 throw new Exception("Error al guardar el registro del plan. HttpStatusCode: ${rpost.getStatusCode()}")
             }
         }
