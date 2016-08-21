@@ -8,14 +8,14 @@ import org.bson.types.ObjectId
 @Resource(readOnly = false, formats = ['json', 'xml'])
 class Plan {
     ObjectId id
-    Proyecto proyecto
-    List<Tarea> tareas
+    Project project
+    List<Task> tasks
 
-    static embedded = ['tareas']
+    static embedded = ['tasks']
 
     static constraints = {
-        proyecto nullable: false
-        tareas nullable: false
+        project nullable: false
+        tasks nullable: false
     }
 
     static mapping = {

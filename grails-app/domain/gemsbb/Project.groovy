@@ -6,12 +6,12 @@ import org.bson.types.ObjectId
 
 @Entity
 @Resource(readOnly = false, formats = ['json', 'xml'])
-class Proyecto {
+class Project {
     ObjectId id
-    String nombre
+    String name
 
     static constraints = {
-        nombre nullable: false
+        name nullable: false
     }
 
     static mapping = {

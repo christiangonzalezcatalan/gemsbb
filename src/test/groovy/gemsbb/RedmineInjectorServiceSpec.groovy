@@ -50,7 +50,7 @@ class RedmineInjectorServiceSpec extends Specification {
         mockServer.when(
                 request()
                         .withMethod('POST')
-                        .withPath('/planes')
+                        .withPath('/plans')
         ).respond(response()
                 .withStatusCode(200)
                 .withHeaders(new Header('Content-Type', 'application/json; charset=utf-8'))
@@ -64,7 +64,7 @@ class RedmineInjectorServiceSpec extends Specification {
         mockServer.verify(
             request()
                 .withMethod("POST")
-                .withPath("/planes")
+                .withPath("/plans")
                 //.withBody("{username: 'foo', password: 'bar'}")
                 ,
             VerificationTimes.exactly(1)

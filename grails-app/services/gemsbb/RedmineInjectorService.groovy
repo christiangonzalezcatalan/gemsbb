@@ -8,7 +8,17 @@ import org.springframework.http.HttpStatus
 @Transactional
 class RedmineInjectorService {
     RestBuilder restClient = new RestBuilder()
+
+    private def getProject(String id, String name) {
+
+    }
+
     def inject() {
+        // 1. Obtener proyecto. Si no está en bb, crear.
+        // 2. Para cada tarea del plan:
+        //  2.1. Obtener responsable. Si no existe en bb, crear.
+        //  2.2. Agregar issues a la lista de tareas
+
         //def resp = restClient.get("http://10.0.2.2:3000/issues.json?project_id=3")
         def resp = restClient.get("http://localhost:8081/issues.json?project_id=3")
         JSONObject result = resp.json
@@ -18,25 +28,25 @@ class RedmineInjectorService {
             println "${firstIssue.status.name} ${firstIssue.tracker.name}. ${firstIssue.subject}: ${firstIssue.description}"
             println firstIssue
 
-            def listTareas = []
+            def taskList = []
 
             result.issues.each {
                 def issue = it
-                listTareas.add({
-                    nombre = "Tarea 1"
-                    fechaInicio = Date.parse('yyyy-MM-dd', issue.start_date)
-                    fechaFin = Date.parse('yyyy-MM-dd', issue.due_date)
-                    estado = issue.status.name
-                    responsable = "57b135d78acec62754906455"
-                    colaboradores = ["57b135d78acec62754906455"]
+                taskList.add({
+                    name = "Task 1"
+                    startDate = Date.parse('yyyy-MM-dd', issue.start_date)
+                    dueDate = Date.parse('yyyy-MM-dd', issue.due_date)
+                    status = issue.status.name
+                    responsible = "57b135d78acec62754906455"
+                    contributors = ["57b135d78acec62754906455"]
                 })
             }
 
-            def rpost = restClient.post("http://localhost:8081/planes") {
+            def rpost = restClient.post("http://localhost:8081/plans") {
                 contentType "application/json"
                 json {
-                    proyecto = "57b110c58acec622e7c43944"
-                    tareas = listTareas
+                    project = "57b110c58acec622e7c43944"
+                    tasks = taskList
                 }
             }
             if (rpost.getStatusCode() != HttpStatus.OK) {

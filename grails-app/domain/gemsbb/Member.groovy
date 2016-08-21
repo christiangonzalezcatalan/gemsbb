@@ -6,13 +6,13 @@ import org.bson.types.ObjectId
 
 @Entity
 @Resource(readOnly = false, formats = ['json', 'xml'])
-class Miembro {
+class Member {
     ObjectId id
-    String nombre
+    String name
     String email
 
     static constraints = {
-        nombre nullable: false
+        name nullable: false
         email nullable: false
     }
 

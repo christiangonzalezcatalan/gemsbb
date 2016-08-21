@@ -9,9 +9,9 @@ class UrlMappings {
             }
         }
 
-        "/proyectos"(resources:'proyecto')
-        "/planes"(resources:'plan')
-        "/miembros"(resources:'miembro')
+        "/projects"(resources:'project')
+        "/plans"(resources:'plan')
+        "/members"(resources:'member')
 
         "/"(controller: 'application', action:'index')
         "500"(view: '/error')
