@@ -11,16 +11,22 @@ class MemberController extends RestfulController<Member> {
         super(Member)
     }
 
-    /*private getByExternalKey(String externalKey) {
-        IdentityMap.findByToolAndEntityTypeAndExternalKey(params.email)
-    }*/
+    private findByExternalKey(String tool, String externalKey) {
+        Member member = null
+        IdentityMap imap = IdentityMap.findByToolAndEntityTypeAndExternalKey(tool, 'Member', externalKey)
+        if(imap != null)
+        {
+            member = Member.get(imap.key)
+        }
+        member
+    }
 
     def search() {
         def result = []
-        if(params.externalKey != null) {
-            result = Member.findByEmail(params.email)
+        if(params.externalKey != null && params.tool != null) {
+            result = findByExternalKey(params.tool, params.externalKey)
         }
-        if(params.email != null) {
+        else if(params.email != null) {
             result = Member.findByEmail(params.email)
         }
         respond result
