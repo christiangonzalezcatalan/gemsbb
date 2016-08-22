@@ -37,24 +37,42 @@ class RedmineInjectorServiceSpec extends Specification {
     void "test inject"() {
         setup:
         mockServer.when(
-            request()
-                .withMethod('GET')
-                .withPath('/issues.json')
-                .withQueryStringParameters(new Parameter('project_id', '3'))
-        ).respond(response()
+            request('/issues.json')
+            .withMethod('GET')
+            .withQueryStringParameters(new Parameter('project_id', '3'))
+        ).respond(response(listarRegistrosPlan())
             .withStatusCode(200)
             .withHeaders(new Header('Content-Type', 'application/json; charset=utf-8'))
-            .withBody(listarRegistrosPlan())
         )
 
         mockServer.when(
-                request()
-                        .withMethod('POST')
-                        .withPath('/plans')
-        ).respond(response()
+                request('/projects/search')
+                .withMethod('GET')
+                .withQueryStringParameters([new Parameter('externalKey', '3'),
+                                            new Parameter('tool', 'Redmine')])
+        ).respond(
+                response('[{"id": "abcde"}]')
                 .withStatusCode(200)
                 .withHeaders(new Header('Content-Type', 'application/json; charset=utf-8'))
-                .withBody("")
+        )
+
+        mockServer.when(
+                request('/members/search')
+                        .withMethod('GET')
+                        .withQueryStringParameters([new Parameter('externalKey', '3'),
+                                                    new Parameter('tool', 'Redmine')])
+        ).respond(
+                response('[{"id": "abcde"}]')
+                        .withStatusCode(200)
+                        .withHeaders(new Header('Content-Type', 'application/json; charset=utf-8'))
+        )
+
+        mockServer.when(
+                request('/plans')
+                        .withMethod('POST')
+        ).respond(response('')
+                .withStatusCode(200)
+                .withHeaders(new Header('Content-Type', 'application/json; charset=utf-8'))
         )
 
         when:
