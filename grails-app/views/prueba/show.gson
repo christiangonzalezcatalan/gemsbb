@@ -1,0 +1,7 @@
+import gemsbb.Prueba
+
+model {
+	Prueba prueba
+}
+
+json tmpl.prueba(prueba)

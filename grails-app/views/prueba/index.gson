@@ -1,0 +1,8 @@
+import gemsbb.Prueba
+
+model {
+	Iterable<Prueba> pruebaList
+}
+
+json tmpl.prueba(pruebaList ?: [])
+
