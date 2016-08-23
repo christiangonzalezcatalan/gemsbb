@@ -15,4 +15,18 @@ class ProjectSpec extends Specification {
 
     def cleanup() {
     }
+
+    def 'test name cannot be null'() {
+        when: 'null name'
+        def p = new Project()
+
+        then: 'validation should fail'
+        !p.validate()
+
+        when: 'name has value'
+        p = new Project(name: 'Mi proyecto')
+
+        then: 'validation should pass'
+        p.validate()
+    }
 }

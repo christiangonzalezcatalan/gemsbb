@@ -13,6 +13,7 @@ class Task {
     static hasMany = [contributors: Member]
 
     static constraints = {
+        name nullable: false
         startDate nullable: false
         dueDate nullable: false
         status nullable: false
