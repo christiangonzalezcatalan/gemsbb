@@ -34,7 +34,7 @@ class RedmineInjectorServiceSpec extends Specification {
         mockServer.reset()
     }
 
-    void "test inject"() {
+    void "test inject project plan"() {
         setup:
         mockServer.when(
             request('/issues.json')
@@ -57,9 +57,20 @@ class RedmineInjectorServiceSpec extends Specification {
         )
 
         mockServer.when(
-                request('/members/search')
+                request('/plans/search')
                         .withMethod('GET')
                         .withQueryStringParameters([new Parameter('externalKey', '3'),
+                                                    new Parameter('tool', 'Redmine')])
+        ).respond(
+                response('[]')
+                        .withStatusCode(200)
+                        .withHeaders(new Header('Content-Type', 'application/json; charset=utf-8'))
+        )
+
+        mockServer.when(
+                request('/members/search')
+                        .withMethod('GET')
+                        .withQueryStringParameters([new Parameter('externalKey', '4'),
                                                     new Parameter('tool', 'Redmine')])
         ).respond(
                 response('[{"id": "abcde"}]')
@@ -76,7 +87,7 @@ class RedmineInjectorServiceSpec extends Specification {
         )
 
         when:
-        service.inject()
+        service.injectProjectPlan(3)
 
         then:
         mockServer.verify(

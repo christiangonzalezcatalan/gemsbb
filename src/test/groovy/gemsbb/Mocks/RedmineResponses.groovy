@@ -26,7 +26,7 @@ class RedmineResponses {
         "name": "Normal"
       },
       "author": {
-        "id": 3,
+        "id": 4,
         "name": "Christian González"
       },
       "subject": "Dashboard",
@@ -57,11 +57,11 @@ class RedmineResponses {
         "name": "High"
       },
       "author": {
-        "id": 3,
+        "id": 4,
         "name": "Christian González"
       },
       "assigned_to": {
-        "id": 3,
+        "id": 4,
         "name": "Christian González"
       },
       "subject": "Inyector plan Redmine",
@@ -92,11 +92,11 @@ class RedmineResponses {
         "name": "High"
       },
       "author": {
-        "id": 3,
+        "id": 4,
         "name": "Christian González"
       },
       "assigned_to": {
-        "id": 3,
+        "id": 4,
         "name": "Christian González"
       },
       "subject": "API Blackboard",
