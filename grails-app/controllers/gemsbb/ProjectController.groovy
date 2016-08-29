@@ -43,14 +43,15 @@ class ProjectController{ // extends RestfulController<Project> {
         if(json.tool != null && json.externalKey != null) {
             IdentityMap imap = new IdentityMap(
                     tool: json.tool,
-                    externalKey: json.externalKey,
+                    externalKey: json.externalKey.toString(),
                     entityType: 'Project',
                     key: project.id
             )
             imap.save(flush: true)
         }
 
-        respond(project, [status: CREATED, view:"show"])
+        respond(project, [status: CREATED])
+        //respond(project, [status: CREATED, view:"show"])
     }
 
     @Transactional
@@ -83,9 +84,12 @@ class ProjectController{ // extends RestfulController<Project> {
     }
 
     def search() {
-        def result = []
+        def result = new ArrayList<Project>()
         if(params.externalKey != null && params.tool != null) {
-            result = findByExternalKey(params.tool, params.externalKey)
+            def findResult = findByExternalKey(params.tool, params.externalKey)
+            if(findResult != null) {
+                result.add(findResult)
+            }
         }
         respond result
     }

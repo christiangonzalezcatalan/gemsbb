@@ -31,6 +31,7 @@ class MemberController {// extends RestfulController<Member> {
     @Transactional
     def save() {
         Member member = new Member()
+        def json = request.JSON
         setProperties(member, request.JSON)
 
         if (member.hasErrors()) {
@@ -45,7 +46,7 @@ class MemberController {// extends RestfulController<Member> {
         if(json.tool != null && json.externalKey != null) {
             IdentityMap imap = new IdentityMap(
                     tool: json.tool,
-                    externalKey: json.externalKey,
+                    externalKey: json.externalKey.toString(),
                     entityType: 'Member',
                     key: member.id
             )
@@ -85,12 +86,15 @@ class MemberController {// extends RestfulController<Member> {
     }
 
     def search() {
-        def result = []
+        def result = new ArrayList<Member>()
         if(params.externalKey != null && params.tool != null) {
-            result = findByExternalKey(params.tool, params.externalKey)
+            def findResult = findByExternalKey(params.tool, params.externalKey)
+            if(findResult != null) {
+                result.add(findResult)
+            }
         }
         else if(params.email != null) {
-            result = Member.findByEmail(params.email)
+            result.addAll(Member.findAllByEmail(params.email))
         }
         respond result
     }

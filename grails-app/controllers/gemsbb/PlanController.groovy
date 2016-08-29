@@ -40,6 +40,7 @@ class PlanController {
     @Transactional
     def save() {
         Plan plan = new Plan()
+        def json = request.JSON
         setProperties(plan, request.JSON)
 
         if (plan.hasErrors()) {
@@ -49,6 +50,17 @@ class PlanController {
         }
 
         plan.save(flush:true)
+
+        // Si se crea al cargar desde una herramienta
+        if(json.tool != null && json.externalKey != null) {
+            IdentityMap imap = new IdentityMap(
+                    tool: json.tool,
+                    externalKey: json.externalKey.toString(),
+                    entityType: 'Plan',
+                    key: plan.id
+            )
+            imap.save(flush: true)
+        }
 
         respond(plan, [status: CREATED, view:"show"])
     }
@@ -70,5 +82,26 @@ class PlanController {
         member.save(flush: true)
 
         respond(member, [status: OK, view:"show"])
+    }
+
+    private findByExternalKey(String tool, String externalKey) {
+        Plan plan = null
+        IdentityMap imap = IdentityMap.findByToolAndEntityTypeAndExternalKey(tool, 'Plan', externalKey)
+        if(imap != null)
+        {
+            plan = Plan.get(imap.key)
+        }
+        plan
+    }
+
+    def search() {
+        def result = new ArrayList<Plan>()
+        if(params.externalKey != null && params.tool != null) {
+            def findResult = findByExternalKey(params.tool, params.externalKey)
+            if(findResult != null) {
+                result.add(findResult)
+            }
+        }
+        respond result
     }
 }

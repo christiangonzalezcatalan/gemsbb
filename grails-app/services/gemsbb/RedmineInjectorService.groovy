@@ -117,7 +117,7 @@ class RedmineInjectorService {
                 responsePlan = restClient.put("http://localhost:8081/plans") {
                     contentType "application/json"
                     json {
-                        id =
+                        id = planId
                         externalKey = externalProjectId
                         tool = 'Redmine'
                         project = projectId
