@@ -9,11 +9,6 @@ class UrlMappings {
             }
         }*/
 
-        "/projects"(resources:'project')
-        "/plans"(resources:'plan')
-        "/members"(controller:'member', action:[GET: 'index', POST: 'save'])
-        "/members/$id"(controller:'member', action:'update')
-
         //"/members"(resources:'member')
         // action:[GET:'get', PUT:'put'
         //"/members"(controller:"member", action:"index")
@@ -22,8 +17,21 @@ class UrlMappings {
         //"/books/create"(controller:"book", action:"create")
         //"/books/$id"(controller:"book", action:"delete")
 
-        "/members/search"(controller: "member", action: "search")
+        "/projects"(resources:'project')
         "/projects/search"(controller: "project", action: "search")
+
+        "/plans"(resources:'plan')
+        "/plans/search"(controller: "plan", action: "search")
+        "/plans/$id"(controller:'plan', action:[PUT:'update'])
+
+        "/traces"(resources:'trace')
+        "/traces/search"(controller: "trace", action: "search")
+        "/traces/$id"(controller:'trace', action:[PUT:'update'])
+
+        "/members"(controller:'member', action:[GET: 'index', POST: 'save'])
+        "/members/$id"(controller:'member', action:'update')
+        "/members/search"(controller: "member", action: "search")
+
         "/prueba"(resources:'prueba')
 
         "/"(controller: 'application', action:'index')

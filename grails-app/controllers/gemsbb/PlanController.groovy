@@ -17,7 +17,7 @@ class PlanController {
 
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)
-        respond Member.list(params), model:[memberCount: Member.count()]
+        respond Plan.list(params), model:[planCount: Plan.count()]
     }
 
     private setProperties(Plan plan, json) {
@@ -66,22 +66,26 @@ class PlanController {
     }
 
     @Transactional
-    def update(Member member) {
-        if (member == null) {
+    def update() {
+        def json = request.JSON
+        Plan plan = Plan.get(json.id)
+        if (plan == null) {
             transactionStatus.setRollbackOnly()
             render status: NOT_FOUND
             return
         }
 
-        if (member.hasErrors()) {
+        setProperties(plan, request.JSON)
+
+        if (plan.hasErrors()) {
             transactionStatus.setRollbackOnly()
-            respond member.errors, view:'edit'
+            respond plan.errors, view:'edit'
             return
         }
 
-        member.save(flush: true)
+        plan.save(flush: true)
 
-        respond(member, [status: OK, view:"show"])
+        respond(plan, [status: OK, view:"show"])
     }
 
     private findByExternalKey(String tool, String externalKey) {
