@@ -6,11 +6,13 @@ import grails.converters.*
 import grails.transaction.Transactional
 
 import static org.springframework.http.HttpStatus.CREATED
+import static org.springframework.http.HttpStatus.NOT_FOUND
+import static org.springframework.http.HttpStatus.OK
 
 @Transactional(readOnly = true)
 class TraceController {
     static responseFormats = ['json']
-    static allowedMethods = [save: "POST", update: "PUT", index: "GET"]
+    static allowedMethods = [save: 'POST', update: 'PUT', index: 'GET']
 
     def index() {
         params.max = Math.min(max ?: 10, 100)
@@ -67,7 +69,7 @@ class TraceController {
             imap.save(flush: true)
         }
 
-        respond(trace, [status: CREATED, view:"show"])
+        respond(trace, [status: CREATED, view:'show'])
     }
 
     @Transactional
@@ -90,6 +92,27 @@ class TraceController {
 
         trace.save(flush: true)
 
-        respond(trace, [status: OK, view:"show"])
+        respond(trace, [status: OK, view: 'show'])
+    }
+
+    private findByExternalKey(String tool, String externalKey) {
+        Trace trace = null
+        IdentityMap imap = IdentityMap.findByToolAndEntityTypeAndExternalKey(tool, 'Trace', externalKey)
+        if(imap != null)
+        {
+            trace = Trace.get(imap.key)
+        }
+        trace
+    }
+
+    def search() {
+        def result = new ArrayList<Plan>()
+        if(params.externalKey != null && params.tool != null) {
+            def findResult = findByExternalKey(params.tool, params.externalKey)
+            if(findResult != null) {
+                result.add(findResult)
+            }
+        }
+        respond result
     }
 }
