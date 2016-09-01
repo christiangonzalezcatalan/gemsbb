@@ -19,6 +19,10 @@ class PlanController {
         respond Plan.list(params), model:[planCount: Plan.count()]
     }
 
+    def show(Plan plan) {
+        respond plan
+    }
+
     private setProperties(Plan plan, json) {
         plan.project = Project.get(json.project.id)
         if(json.tasks != null) {

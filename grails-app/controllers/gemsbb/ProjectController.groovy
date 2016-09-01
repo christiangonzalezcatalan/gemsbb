@@ -8,6 +8,7 @@ import grails.rest.*
 import grails.converters.*
 import grails.transaction.Transactional
 
+@Transactional(readOnly = true)
 class ProjectController{ // extends RestfulController<Project> {
     static responseFormats = ['json']
     static allowedMethods = [save: "POST", update: "PUT", index: "GET"]
@@ -19,6 +20,10 @@ class ProjectController{ // extends RestfulController<Project> {
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)
         respond Project.list(params), model:[projectCount: Project.count()]
+    }
+
+    def show(Project project) {
+        respond project
     }
 
     private setProperties(Project project, json) {
@@ -55,22 +60,22 @@ class ProjectController{ // extends RestfulController<Project> {
     }
 
     @Transactional
-    def update(Member member) {
-        if (member == null) {
+    def update(Project project) {
+        if (project == null) {
             transactionStatus.setRollbackOnly()
             render status: NOT_FOUND
             return
         }
 
-        if (member.hasErrors()) {
+        if (project.hasErrors()) {
             transactionStatus.setRollbackOnly()
-            respond member.errors, view:'edit'
+            respond project.errors, view:'edit'
             return
         }
 
-        member.save(flush: true)
+        project.save(flush: true)
 
-        respond(member, [status: OK, view:"show"])
+        respond(project, [status: OK, view:"show"])
     }
 
     private findByExternalKey(String tool, String externalKey) {

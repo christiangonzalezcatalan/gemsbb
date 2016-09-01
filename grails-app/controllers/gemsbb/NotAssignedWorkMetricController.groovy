@@ -18,6 +18,10 @@ class NotAssignedWorkMetricController {
         respond NotAssignedWorkMetric.list(params), model:[notAssignedWorkMetricCount: NotAssignedWorkMetric.count()]
     }
 
+    def show(NotAssignedWorkMetric metric) {
+        respond metric
+    }
+
     private getMembersWork(json) {
         if(json != null) {
             return json.collect() {

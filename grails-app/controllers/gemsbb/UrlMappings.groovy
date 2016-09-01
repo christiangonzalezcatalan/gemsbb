@@ -18,22 +18,23 @@ class UrlMappings {
         //"/books/$id"(controller:"book", action:"delete")
 
         "/projects"(resources:'project')
+        "/projects/$id"(controller:'project', [PUT:'update', GET:'show'])
         "/projects/search"(controller: "project", action: "search")
 
         "/plans"(resources:'plan')
         "/plans/search"(controller: "plan", action: "search")
-        "/plans/$id"(controller:'plan', action:[PUT:'update'])
+        "/plans/$id"(controller:'plan', action:[PUT:'update', GET:'show'])
 
         "/traces"(resources:'trace')
         "/traces/search"(controller: "trace", action: "search")
-        "/traces/$id"(controller:'trace', action:[PUT:'update'])
+        "/traces/$id"(controller:'trace', action:[PUT:'update', GET:'show'])
 
-        "/members"(controller:'member', action:[GET: 'index', POST: 'save'])
-        "/members/$id"(controller:'member', action:'update')
+        "/members"(resources:'member', controller:'member', action:[GET: 'index', POST: 'save'])
+        "/members/$id"(controller:'member', [PUT:'update', GET:'show'])
         "/members/search"(controller: "member", action: "search")
 
-        "/notAssignedWorkMetrics"(controller:'notAssignedWorkMetric', action:[GET: 'index', POST: 'save'])
-        "/notAssignedWorkMetrics/$id"(controller:'notAssignedWorkMetric', action:'update')
+        "/notAssignedWorkMetrics"(resources: 'notAssignedWorkMetric', controller:'notAssignedWorkMetric', action:[GET: 'index', POST: 'save'])
+        "/notAssignedWorkMetrics/$id"(controller:'notAssignedWorkMetric', [PUT:'update', GET:'show'])
         //"/notAssignedWorkMetric/search"(controller: "member", action: "search")
 
         "/prueba"(resources:'prueba')

@@ -19,6 +19,10 @@ class TraceController {
         respond Trace.list(params), model:[traceCount: Trace.count()]
     }
 
+    def show(Trace trace) {
+        respond trace
+    }
+
     private def getDetail(json) {
       println json.collect() {
           new TraceDetail(member: Member.get(it.member.id),

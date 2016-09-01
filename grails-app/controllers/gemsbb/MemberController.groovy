@@ -23,6 +23,10 @@ class MemberController {// extends RestfulController<Member> {
         respond Member.list(params), model:[memberCount: Member.count()]
     }
 
+    def show(Member member) {
+        respond member
+    }
+
     private setProperties(Member member, json) {
         member.name = json.name
         member.email = json.email
