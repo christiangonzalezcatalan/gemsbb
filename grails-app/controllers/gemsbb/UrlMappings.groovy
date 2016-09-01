@@ -32,6 +32,10 @@ class UrlMappings {
         "/members/$id"(controller:'member', action:'update')
         "/members/search"(controller: "member", action: "search")
 
+        "/notAssignedWorkMetrics"(controller:'notAssignedWorkMetric', action:[GET: 'index', POST: 'save'])
+        "/notAssignedWorkMetrics/$id"(controller:'notAssignedWorkMetric', action:'update')
+        //"/notAssignedWorkMetric/search"(controller: "member", action: "search")
+
         "/prueba"(resources:'prueba')
 
         "/"(controller: 'application', action:'index')
