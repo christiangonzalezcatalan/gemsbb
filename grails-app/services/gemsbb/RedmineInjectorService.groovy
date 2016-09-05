@@ -87,9 +87,6 @@ class RedmineInjectorService {
         JSONObject result = resp.json
         if(result.issues.size() > 0) {
             def firstIssue = result.issues[0]
-            println firstIssue.project.name
-            println "${firstIssue.status.name} ${firstIssue.tracker.name}. ${firstIssue.subject}: ${firstIssue.description}"
-            println firstIssue
 
             def projectId = getProjectId(firstIssue.project.id, firstIssue.project.name)
 
@@ -101,7 +98,6 @@ class RedmineInjectorService {
 
             def planId = getPlanId(externalProjectId)
             def responsePlan
-            println 'planid: ' + planId
             if(planId == null) {
                 responsePlan = restClient.post("http://localhost:8081/plans") {
                     contentType "application/json"

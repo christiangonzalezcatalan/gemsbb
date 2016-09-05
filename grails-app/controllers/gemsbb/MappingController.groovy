@@ -2,7 +2,6 @@ package gemsbb
 
 import static org.springframework.http.HttpStatus.CREATED
 import static org.springframework.http.HttpStatus.NOT_FOUND
-import static org.springframework.http.HttpStatus.NOT_FOUND
 import static org.springframework.http.HttpStatus.OK
 
 import grails.rest.*
@@ -10,7 +9,7 @@ import grails.converters.*
 import grails.transaction.Transactional
 
 @Transactional(readOnly = true)
-class MemberController {
+class MappingController {
     static responseFormats = ['json']
     static allowedMethods = [save: "POST", update: "PUT", index: "GET"]
 
@@ -18,65 +17,68 @@ class MemberController {
         def queryParams = params
         queryParams.max = Math.min(max ?: 10, 100)
 
-        def query = Member.where {
+        def query = Mapping.where {
+           project == Project.get(queryParams.projectId)
         }
 
-        if(queryParams.email != null) {
+        if(params.tool != null) {
             query = query.where {
-                email == queryParams.email
+                tool == queryParams.tool
             }
         }
 
-        respond query.findAll(), model:[memberCount: query.count()]
+        if(params.entityType != null) {
+            query = query.where {
+                entityType == queryParams.entityType
+            }
+        }
+
+        respond  query.findAll(), model:[mappingCount: query.count()]
     }
 
-    def show(Member member) {
-        respond member
+    def show(Mapping mapping) {
+        respond mapping
     }
 
     @Transactional
-    def save(Member member) {
-        if (member == null) {
+    def save(Mapping mapping) {
+        if (mapping == null) {
             transactionStatus.setRollbackOnly()
             render status: NOT_FOUND
             return
         }
 
-        if (member.hasErrors()) {
+        mapping.project = Project.get(params.projectId)
+
+        if (!mapping.validate()) {
             transactionStatus.setRollbackOnly()
-            respond member.errors, view:'create'
+            respond mapping.errors, view:'create'
             return
         }
 
-        member.save flush:true
+        mapping.save flush:true
 
-        respond member, [status: CREATED, view:"show"]
+        respond mapping, [status: CREATED, view:"show"]
     }
 
     @Transactional
-    def update(Member member) {
-        if (member == null) {
+    def update(Mapping mapping) {
+        if (mapping == null) {
             transactionStatus.setRollbackOnly()
             render status: NOT_FOUND
             return
         }
 
-        if (member.hasErrors()) {
+        mapping.project = Project.get(params.projectId)
+
+        if (!mapping.validate()) {
             transactionStatus.setRollbackOnly()
-            respond member.errors, view:'edit'
+            respond mapping.errors, view:'edit'
             return
         }
 
-        member.save(flush: true)
+        mapping.save flush:true
 
-        respond(member, [status: OK, view:"show"])
+        respond mapping, [status: OK, view:"show"]
     }
-
-    // Se debe filtrar por empresa!!!
-    /*@Override
-    protected Member queryForResource(Serializable id) {
-        Book.where {
-            id == id && author.id = params.authorId
-        }.find()
-    }*/
 }

@@ -22,6 +22,58 @@ class NotAssignedWorkMetricController {
         respond metric
     }
 
+    @Transactional
+    def save(NotAssignedWorkMetric metric) {
+        if (metric == null) {
+            transactionStatus.setRollbackOnly()
+            render status: NOT_FOUND
+            return
+        }
+
+        if (metric.hasErrors()) {
+            transactionStatus.setRollbackOnly()
+            respond metric.errors, view:'create'
+            return
+        }
+
+        metric.save flush:true
+
+        respond metric, [status: CREATED, view:"show"]
+    }
+
+    @Transactional
+    def update(NotAssignedWorkMetric metric) {
+        if (metric == null) {
+            transactionStatus.setRollbackOnly()
+            render status: NOT_FOUND
+            return
+        }
+
+        if (metric.hasErrors()) {
+            transactionStatus.setRollbackOnly()
+            respond metric.errors, view:'edit'
+            return
+        }
+
+        metric.save flush:true
+
+        respond metric, [status: OK, view:"show"]
+    }
+
+    @Transactional
+    def delete(NotAssignedWorkMetric metric) {
+
+        if (metric == null) {
+            transactionStatus.setRollbackOnly()
+            render status: NOT_FOUND
+            return
+        }
+
+        metric.delete flush:true
+
+        render status: NO_CONTENT
+    }
+
     private getMembersWork(json) {
         if(json != null) {
             return json.collect() {
@@ -79,7 +131,6 @@ class NotAssignedWorkMetricController {
 
     private setProperties(NotAssignedWorkMetric metric, json) {
         metric.project = Project.get(json.project.id)
-        println "id: ${json.project.id}. ${metric.project}"
         metric.projects = getProjects(json.projects)
         metric.members = getMembers(json.members)
         metric.year = json.year
@@ -98,7 +149,7 @@ class NotAssignedWorkMetricController {
         }
     }
 
-    @Transactional
+    /*@Transactional
     def save() {
         NotAssignedWorkMetric metric = new NotAssignedWorkMetric()
         def json = request.JSON
@@ -116,5 +167,5 @@ class NotAssignedWorkMetricController {
         metric.save(flush:true)
 
         respond(metric, [status: CREATED, view:"show"])
-    }
+    }*/
 }

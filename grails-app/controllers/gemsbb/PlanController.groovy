@@ -9,12 +9,72 @@ import grails.converters.*
 import grails.transaction.Transactional
 
 @Transactional(readOnly = true)
-class PlanController {
+class PlanController extends RestfulController<Plan> {
     static responseFormats = ['json']
     static allowedMethods = [save: "POST", update: "PUT", index: "GET"]
 
-
     def index(Integer max) {
+        params.max = Math.min(max ?: 10, 100)
+        respond Plan.list(params), model:[pruebaCount: Plan.count()]
+    }
+
+    def show(Plan plan) {
+        respond plan
+    }
+
+    @Transactional
+    def save(Plan plan) {
+        if (plan == null) {
+            transactionStatus.setRollbackOnly()
+            render status: NOT_FOUND
+            return
+        }
+
+        if (plan.hasErrors()) {
+            transactionStatus.setRollbackOnly()
+            respond plan.errors, view:'create'
+            return
+        }
+
+        plan.save flush:true
+
+        respond plan, [status: CREATED, view:"show"]
+    }
+
+    @Transactional
+    def update(Plan plan) {
+        if (plan == null) {
+            transactionStatus.setRollbackOnly()
+            render status: NOT_FOUND
+            return
+        }
+
+        if (plan.hasErrors()) {
+            transactionStatus.setRollbackOnly()
+            respond plan.errors, view:'edit'
+            return
+        }
+
+        plan.save flush:true
+
+        respond plan, [status: OK, view:"show"]
+    }
+
+    @Transactional
+    def delete(Plan plan) {
+
+        if (plan == null) {
+            transactionStatus.setRollbackOnly()
+            render status: NOT_FOUND
+            return
+        }
+
+        plan.delete flush:true
+
+        render status: NO_CONTENT
+    }
+
+    /*def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)
         respond Plan.list(params), model:[planCount: Plan.count()]
     }
@@ -110,5 +170,5 @@ class PlanController {
             }
         }
         respond result
-    }
+    }*/
 }

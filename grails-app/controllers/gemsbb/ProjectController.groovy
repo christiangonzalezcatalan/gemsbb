@@ -9,32 +9,26 @@ import grails.converters.*
 import grails.transaction.Transactional
 
 @Transactional(readOnly = true)
-class ProjectController{ // extends RestfulController<Project> {
+class ProjectController {
     static responseFormats = ['json']
     static allowedMethods = [save: "POST", update: "PUT", index: "GET"]
 
-    //ProjectController() {
-    //    super(Project)
-    //}
-
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)
-        respond Project.list(params), model:[projectCount: Project.count()]
+        respond Project.list(params), model:[pruebaCount: Project.count()]
     }
 
     def show(Project project) {
         respond project
     }
 
-    private setProperties(Project project, json) {
-        project.name = json.name
-    }
-
     @Transactional
-    def save() {
-        Project project = new Project()
-        def json = request.JSON
-        setProperties(project, json)
+    def save(Project project) {
+        if (project == null) {
+            transactionStatus.setRollbackOnly()
+            render status: NOT_FOUND
+            return
+        }
 
         if (project.hasErrors()) {
             transactionStatus.setRollbackOnly()
@@ -42,21 +36,9 @@ class ProjectController{ // extends RestfulController<Project> {
             return
         }
 
-        project.save(flush:true)
+        project.save flush:true
 
-        // Si se crea al cargar desde una herramienta
-        if(json.tool != null && json.externalKey != null) {
-            IdentityMap imap = new IdentityMap(
-                    tool: json.tool,
-                    externalKey: json.externalKey.toString(),
-                    entityType: 'Project',
-                    key: project.id
-            )
-            imap.save(flush: true)
-        }
-
-        respond(project, [status: CREATED])
-        //respond(project, [status: CREATED, view:"show"])
+        respond project, [status: CREATED, view:"show"]
     }
 
     @Transactional
@@ -73,29 +55,22 @@ class ProjectController{ // extends RestfulController<Project> {
             return
         }
 
-        project.save(flush: true)
+        project.save flush:true
 
-        respond(project, [status: OK, view:"show"])
+        respond project, [status: OK, view:"show"]
     }
 
-    private findByExternalKey(String tool, String externalKey) {
-        Project project = null
-        IdentityMap imap = IdentityMap.findByToolAndEntityTypeAndExternalKey(tool, 'Project', externalKey)
-        if(imap != null)
-        {
-            project = Project.get(imap.key)
-        }
-        project
-    }
+    @Transactional
+    def delete(Project project) {
 
-    def search() {
-        def result = new ArrayList<Project>()
-        if(params.externalKey != null && params.tool != null) {
-            def findResult = findByExternalKey(params.tool, params.externalKey)
-            if(findResult != null) {
-                result.add(findResult)
-            }
+        if (project == null) {
+            transactionStatus.setRollbackOnly()
+            render status: NOT_FOUND
+            return
         }
-        respond result
+
+        project.delete flush:true
+
+        render status: NO_CONTENT
     }
 }
