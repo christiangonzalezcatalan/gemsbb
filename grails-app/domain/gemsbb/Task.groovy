@@ -2,9 +2,12 @@ package gemsbb
 
 
 import grails.rest.*
+import org.bson.types.ObjectId
+import grails.gorm.annotation.Entity
 
 @Resource(readOnly = false, formats = ['json', 'xml'])
 class Task {
+    ObjectId taskId
     String name
     Date startDate
     Date dueDate
@@ -13,6 +16,7 @@ class Task {
     static hasMany = [contributors: Member]
 
     static constraints = {
+        taskId nullable: false
         name nullable: false
         startDate nullable: false
         dueDate nullable: false

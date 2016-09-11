@@ -9,7 +9,7 @@ import grails.converters.*
 import grails.transaction.Transactional
 
 @Transactional(readOnly = true)
-class PlanController extends RestfulController<Plan> {
+class PlanController {
     static responseFormats = ['json']
     static allowedMethods = [save: "POST", update: "PUT", index: "GET"]
 

@@ -8,10 +8,10 @@ import org.bson.types.ObjectId
 @Resource(readOnly = false, formats = ['json', 'xml'])
 class Plan {
     ObjectId id
-    //Project project
+    Project project
     List<Task> tasks
 
-    static belongsTo = [project: Project]
+    //static belongsTo = [project: Project]
     static embedded = ['tasks']
 
     static constraints = {

@@ -11,6 +11,7 @@ class Mapping {
     Project project
     String tool
     String entityType
+    String externalId
     Map map
 
     static constraints = {
