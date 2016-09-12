@@ -7,6 +7,7 @@ import org.bson.types.ObjectId
 @Entity
 @Resource(readOnly = false, formats = ['json', 'xml'])
 class TaskTrace {
+    ObjectId taskTraceId
     String name
     String status
     List<TraceDetail> traceDetails
@@ -14,6 +15,7 @@ class TaskTrace {
     static embedded = ['traceDetails']
 
     static constraints = {
+        taskTraceId nullable: false
         name nullable: false
         status nullable: false
     }

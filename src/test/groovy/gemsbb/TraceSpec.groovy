@@ -3,6 +3,7 @@ package gemsbb
 import grails.test.mixin.TestFor
 import grails.test.mixin.Mock
 import spock.lang.Specification
+import org.bson.types.ObjectId
 
 /**
  * See the API for {@link grails.test.mixin.domain.DomainClassUnitTestMixin} for usage instructions
@@ -63,28 +64,53 @@ class TraceSpec extends Specification {
         then:
         td.validate()
 
-        when: 'null project and null tasks'
+        when: 'null project and null tasks and null trask trace id'
         TaskTrace ts = new TaskTrace(name: 'Traza de mi proyecto')
 
         then: 'validation should fail'
         !ts.validate()
 
-        when: 'null project and null tasks'
-        ts = new TaskTrace(status: 'Finished')
+        when: 'null task trace id'
+        ts = new TaskTrace(
+            name: 'Traza de mi proyecto',
+            status: 'Finished',
+            traceDetails: [td])
+
+        then: 'validation should fail'
+        !ts.validate()
+
+        when: 'null name'
+        ts = new TaskTrace(
+            taskTraceId: new ObjectId(),
+            status: 'Finished',
+            traceDetails: [td])
+
+        then: 'validation should fail'
+        !ts.validate()
+
+        when: 'null status'
+        ts = new TaskTrace(
+            taskTraceId: new ObjectId(),
+            name: 'Traza de mi proyecto',
+            traceDetails: [td])
 
         then: 'validation should fail'
         !ts.validate()
 
         when: 'null project and null tasks'
-        ts = new TaskTrace(name: 'Traza de mi proyecto', status: 'Finished', traceDetails: [td])
+        ts = new TaskTrace(
+            taskTraceId: new ObjectId(),
+            name: 'Traza de mi proyecto',
+            status: 'Finished',
+            traceDetails: [td])
 
-        then: 'validation should fail'
+        then: 'validation should pass'
         ts.validate()
 
         when:
         p = new Trace(project: new Project(name: 'Mi proyecto'), taskTraces: [ts])
 
-        then:
+        then: 'validation should pass'
         p.validate()
     }
 }
