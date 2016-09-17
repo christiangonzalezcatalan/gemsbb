@@ -8,6 +8,7 @@ class UrlMappings {
         }
 
         "/plans"(resources:'plan')
+        "/projectMetrics"(resources:'projectMetric')
         "/traces"(resources:'trace')
         "/members"(resources:'member')
         "/notAssignedWorkMetrics"(resources: 'notAssignedWorkMetric')

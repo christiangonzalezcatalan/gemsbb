@@ -9,68 +9,55 @@ import grails.converters.*
 import grails.transaction.Transactional
 
 @Transactional(readOnly = true)
-class ProjectController {
+class ProjectMetricController {
     static responseFormats = ['json']
     static allowedMethods = [save: "POST", update: "PUT", index: "GET"]
 
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)
-        respond Project.list(params), model:[projectCount: Project.count()]
+        respond ProjectMetric.list(params), model:[projectCount: ProjectMetric.count()]
     }
 
-    def show(Project project) {
-        respond project
+    def show(ProjectMetric projectMetric) {
+        respond projectMetric
     }
 
     @Transactional
-    def save(Project project) {
-        if (project == null) {
+    def save(ProjectMetric projectMetric) {
+        println "Proyecto: ${projectMetric.data}"
+        if (projectMetric == null) {
             transactionStatus.setRollbackOnly()
             render status: NOT_FOUND
             return
         }
 
-        if (project.hasErrors()) {
+        if (projectMetric.hasErrors()) {
             transactionStatus.setRollbackOnly()
-            respond project.errors, view:'create'
+            respond projectMetric.errors, view:'create'
             return
         }
 
-        project.save flush:true
+        projectMetric.save flush:true
 
-        respond project, [status: CREATED, view:"show"]
+        respond projectMetric, [status: CREATED, view:"show"]
     }
 
     @Transactional
-    def update(Project project) {
-        if (project == null) {
+    def update(ProjectMetric projectMetric) {
+        if (projectMetric == null) {
             transactionStatus.setRollbackOnly()
             render status: NOT_FOUND
             return
         }
 
-        if (project.hasErrors()) {
+        if (projectMetric.hasErrors()) {
             transactionStatus.setRollbackOnly()
-            respond project.errors, view:'edit'
+            respond projectMetric.errors, view:'edit'
             return
         }
 
-        project.save flush:true
+        projectMetric.save flush:true
 
-        respond project, [status: OK, view:"show"]
-    }
-
-    @Transactional
-    def delete(Project project) {
-
-        if (project == null) {
-            transactionStatus.setRollbackOnly()
-            render status: NOT_FOUND
-            return
-        }
-
-        project.delete flush:true
-
-        render status: NO_CONTENT
+        respond projectMetric, [status: OK, view:"show"]
     }
 }
