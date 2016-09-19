@@ -10,6 +10,8 @@ class ProjectSummary {
     Project project
     Map metricData
 
+    static embedded = ['project']
+
     static constraints = {
         project nullable: false
         metricData nullable: false

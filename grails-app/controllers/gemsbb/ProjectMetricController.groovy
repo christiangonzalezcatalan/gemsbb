@@ -24,7 +24,6 @@ class ProjectMetricController {
 
     @Transactional
     def save(ProjectMetric projectMetric) {
-        println "Proyecto: ${projectMetric.data}"
         if (projectMetric == null) {
             transactionStatus.setRollbackOnly()
             render status: NOT_FOUND

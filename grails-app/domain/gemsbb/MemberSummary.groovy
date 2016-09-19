@@ -10,6 +10,8 @@ class MemberSummary {
     Member member
     Map metricData
 
+    static embedded = ['member']
+
     static constraints = {
         member nullable: false
         metricData nullable: false

@@ -4,6 +4,7 @@ package gemsbb
 import grails.rest.*
 import grails.converters.*
 import grails.transaction.Transactional
+import org.bson.types.ObjectId
 
 import static org.springframework.http.HttpStatus.CREATED
 import static org.springframework.http.HttpStatus.NOT_FOUND
@@ -16,7 +17,13 @@ class TraceController {
 
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)
-        respond Trace.list(params), model:[traceCount: Trace.count()]
+        if(params.projectId != null) {
+            def result = Trace.findAllByProject(new ObjectId(params.projectId))
+            respond result, model:[traceCount: result.size()]
+        }
+        else {
+            respond Trace.list(params), model:[traceCount: Trace.count()]
+        }
     }
 
     def show(Trace trace) {

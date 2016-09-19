@@ -7,6 +7,7 @@ import static org.springframework.http.HttpStatus.OK
 import grails.rest.*
 import grails.converters.*
 import grails.transaction.Transactional
+import org.bson.types.ObjectId
 
 @Transactional(readOnly = true)
 class PlanController {
@@ -15,7 +16,13 @@ class PlanController {
 
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)
-        respond Plan.list(params), model:[pruebaCount: Plan.count()]
+        if(params.projectId != null) {
+            def result = Plan.findAllByProject(new ObjectId(params.projectId))
+            respond result, model:[planCount: result.size()]
+        }
+        else {
+            respond Plan.list(params), model:[planCount: Plan.count()]
+        }
     }
 
     def show(Plan plan) {

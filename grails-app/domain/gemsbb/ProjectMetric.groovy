@@ -17,7 +17,7 @@ class ProjectMetric {
     List<ProjectMetricDetail> details
 
 
-    static embedded = ['project', 'projectsSummary', 'membersSummary']
+    static embedded = ['project', 'projectsSummary', 'membersSummary', 'details']
 
     static constraints = {
         month nullable: false
