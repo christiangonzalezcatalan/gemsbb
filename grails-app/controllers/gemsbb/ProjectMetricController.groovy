@@ -7,6 +7,7 @@ import static org.springframework.http.HttpStatus.OK
 import grails.rest.*
 import grails.converters.*
 import grails.transaction.Transactional
+import org.bson.types.ObjectId
 
 @Transactional(readOnly = true)
 class ProjectMetricController {
@@ -15,7 +16,21 @@ class ProjectMetricController {
 
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)
-        respond ProjectMetric.list(params), model:[projectCount: ProjectMetric.count()]
+
+        if(params.projectId != null &&params.name != null && params.month != null && params.year != null) {
+            def rparams = params
+            def query = ProjectMetric.where {
+                project.id == new ObjectId(params.projectId) &&
+                name == rparams.name &&
+                month == Integer.parseInt(rparams.month) &&
+                year == Integer.parseInt(rparams.year)
+            }
+            def result = query.findAll()
+            respond result, model:[projectMetricCount: result.size()]
+        }
+        else {
+            respond ProjectMetric.list(), model:[projectMetricCount: ProjectMetric.count()]
+        }
     }
 
     def show(ProjectMetric projectMetric) {
