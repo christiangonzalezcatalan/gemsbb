@@ -6,17 +6,15 @@ import org.bson.types.ObjectId
 
 @Entity
 @Resource(readOnly = false, formats = ['json', 'xml'])
-class Mapping {
-    ObjectId id
-    Project project
-    String tool
-    List<MappingDetail> map
-
-    static embedded = ['map']
+class MappingDetail {
+    ObjectId internalId
+    String entityType
+    String externalId
 
     static constraints = {
-        project nullable: false
-        tool nullable: false
+        entityType nullable: false
+        externalId nullable: false
+        internalId nullable: false
     }
 
     static mapping = {

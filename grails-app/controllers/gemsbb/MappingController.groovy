@@ -27,12 +27,6 @@ class MappingController {
             }
         }
 
-        if(params.entityType != null) {
-            query = query.where {
-                entityType == queryParams.entityType
-            }
-        }
-
         respond  query.findAll(), model:[mappingCount: query.count()]
     }
 
