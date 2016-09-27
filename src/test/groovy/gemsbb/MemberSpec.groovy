@@ -16,27 +16,27 @@ class MemberSpec extends Specification {
     def cleanup() {
     }
 
-    def 'test name and mail cannot be null'() {
+    def 'test name, mail and orgaization cannot be null'() {
+        when: 'name, email and organization are null'
+        def m = new Member()
+
+        then: 'validation should fail'
+        !m.validate()
+
         when: 'null name'
-        def m = new Member(email: 'christian@christian.cl')
+        m = new Member(email: 'christian@christian.cl', organization: new Organization())
 
         then: 'validation should fail'
         !m.validate()
 
-        when: 'enull mail'
-        m = new Member(name: 'christian')
+        when: 'null email'
+        m = new Member(name: 'christian', organization: new Organization())
 
         then: 'validation should fail'
         !m.validate()
 
-        when: 'name and email are null'
-        m = new Member()
-
-        then: 'validation should fail'
-        !m.validate()
-
-        when: 'name and email have value'
-        m = new Member(name: 'christian', email: 'christian@christian.cl')
+        when: 'name, email and organization have value'
+        m = new Member(name: 'christian', email: 'christian@christian.cl', organization: new Organization())
 
         then: 'validation should pass'
         m.validate()

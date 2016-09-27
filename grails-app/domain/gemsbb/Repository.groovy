@@ -6,16 +6,15 @@ import org.bson.types.ObjectId
 
 @Entity
 @Resource(readOnly = false, formats = ['json', 'xml'])
-class Member {
+class Repository {
     ObjectId id
     Organization organization
-    String name
-    String email
+    String toolName
+    Map data
 
     static constraints = {
-        name nullable: false
-        email nullable: false
         organization nullable: false
+        toolName nullable: false
     }
 
     static mapping = {

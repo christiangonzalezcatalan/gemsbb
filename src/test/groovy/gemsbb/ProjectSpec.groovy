@@ -17,14 +17,26 @@ class ProjectSpec extends Specification {
     }
 
     def 'test name cannot be null'() {
-        when: 'null name'
+        when: 'null name and organization'
         def p = new Project()
 
         then: 'validation should fail'
         !p.validate()
 
-        when: 'name has value'
+        when: 'null name'
+        p = new Project(organization: new Organization())
+
+        then: 'validation should fail'
+        !p.validate()
+
+        when: 'null organzation'
         p = new Project(name: 'Mi proyecto')
+
+        then: 'validation should fail'
+        !p.validate()
+
+        when: 'name and organization have value'
+        p = new Project(organization: new Organization(), name: 'Mi proyecto')
 
         then: 'validation should pass'
         p.validate()

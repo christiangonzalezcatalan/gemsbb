@@ -10,73 +10,67 @@ import grails.transaction.Transactional
 import org.bson.types.ObjectId
 
 @Transactional(readOnly = true)
-class PlanController {
+class OrganizationController {
     static responseFormats = ['json']
     static allowedMethods = [save: "POST", update: "PUT", index: "GET"]
 
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)
-        if(params.projectId != null) {
-            def result = Plan.findAllByProject(new ObjectId(params.projectId))
-            respond result, model:[planCount: result.size()]
-        }
-        else {
-            respond Plan.list(params), model:[planCount: Plan.count()]
-        }
+        respond Organization.list(params), model:[organizationCount: Organization.count()]
     }
 
-    def show(Plan plan) {
-        respond plan
+    def show(Organization organization) {
+        respond organization
     }
 
     @Transactional
-    def save(Plan plan) {
-        if (plan == null) {
+    def save(Organization organization) {
+        if (organization == null) {
             transactionStatus.setRollbackOnly()
             render status: NOT_FOUND
             return
         }
 
-        if (plan.hasErrors()) {
+        if (organization.hasErrors()) {
             transactionStatus.setRollbackOnly()
-            respond plan.errors, view:'create'
+            respond organization.errors, view:'create'
             return
         }
 
-        plan.save flush:true
+        organization.save flush:true
 
-        respond plan, [status: CREATED, view:"show"]
+        respond organization, [status: CREATED, view:"show"]
     }
 
     @Transactional
-    def update(Plan plan) {
-        if (plan == null) {
+    def update(Organization organization) {
+        if (organization == null) {
             transactionStatus.setRollbackOnly()
             render status: NOT_FOUND
             return
         }
 
-        if (plan.hasErrors()) {
+        if (organization.hasErrors()) {
             transactionStatus.setRollbackOnly()
-            respond plan.errors, view:'edit'
+            respond organization.errors, view:'edit'
             return
         }
 
-        plan.save flush:true
+        organization.save flush:true
 
-        respond plan, [status: OK, view:"show"]
+        respond organization, [status: OK, view:"show"]
     }
 
     @Transactional
-    def delete(Plan plan) {
+    def delete(Organization organization) {
 
-        if (plan == null) {
+        if (organization == null) {
             transactionStatus.setRollbackOnly()
             render status: NOT_FOUND
             return
         }
 
-        plan.delete flush:true
+        organization.delete flush:true
 
         render status: NO_CONTENT
     }

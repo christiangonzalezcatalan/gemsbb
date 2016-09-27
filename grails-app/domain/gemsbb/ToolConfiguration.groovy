@@ -6,16 +6,16 @@ import org.bson.types.ObjectId
 
 @Entity
 @Resource(readOnly = false, formats = ['json', 'xml'])
-class Member {
+class ToolConfiguration {
     ObjectId id
-    Organization organization
-    String name
-    String email
+    Project project
+    String toolName
+    List<String> processNames
+    Map parameters
 
     static constraints = {
-        name nullable: false
-        email nullable: false
-        organization nullable: false
+        project nullable: false
+        processNames nullable: false
     }
 
     static mapping = {
