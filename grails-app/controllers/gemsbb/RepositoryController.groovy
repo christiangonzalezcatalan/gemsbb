@@ -17,13 +17,11 @@ static responseFormats = ['json']
         def queryParams = params
         queryParams.max = Math.min(max ?: 10, 100)
 
-        println queryParams.organizationId
-
         def query = Repository.where {
            organization == Organization.get(queryParams.organizationId)
         }
 
-        if(queryParams.name != null) {
+        if(queryParams.toolName != null) {
             query = query.where {
                 toolName == queryParams.toolName
             }

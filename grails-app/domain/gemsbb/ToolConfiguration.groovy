@@ -9,6 +9,7 @@ import org.bson.types.ObjectId
 class ToolConfiguration {
     ObjectId id
     Project project
+    Repository repository
     String toolName
     List<String> processNames
     Map parameters
@@ -16,6 +17,7 @@ class ToolConfiguration {
     static constraints = {
         project nullable: false
         processNames nullable: false
+        repository nullable: false
     }
 
     static mapping = {
