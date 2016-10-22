@@ -15,6 +15,7 @@ class UrlMappings {
         }
         "/projectMetrics"(resources:'projectMetric')
         "/traces"(resources:'trace')
+        "/tools"(resources:'tool')
         "/members"(resources:'member')
         "/notAssignedWorkMetrics"(resources: 'notAssignedWorkMetric')
 
