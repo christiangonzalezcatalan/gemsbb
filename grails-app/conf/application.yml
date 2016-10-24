@@ -50,6 +50,15 @@ grails:
         database: gemsbbtest
         engine: codec
 ---
+rabbitmq:
+    connections:
+      - name: main
+        host: localhost
+        username: guest
+        password: guest
+    exchanges:
+      - name: testGemsBBExchange
+        type: topic
 ---
 grails:
     profile: rest-api
