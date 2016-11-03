@@ -10,10 +10,14 @@ class Project {
     ObjectId id
     Organization organization
     String name
+    List<ToolConfiguration> toolsConfiguration
+
+    static embedded = ['toolsConfiguration']
 
     static constraints = {
         name nullable: false
         organization nullable: false
+        toolsConfiguration nullable: true
     }
 
     static mapping = {

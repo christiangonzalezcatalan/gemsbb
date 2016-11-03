@@ -18,11 +18,11 @@ class ToolConfigurationController {
         queryParams.max = Math.min(max ?: 10, 100)
         def query = ToolConfiguration.where {}
 
-        if(queryParams.projectId != null) {
+        /*if(queryParams.projectId != null) {
             query = query.where {
                 project == Project.get(queryParams.projectId)
             }
-        }
+        }*/
 
         if(params.toolName != null) {
             query = query.where {

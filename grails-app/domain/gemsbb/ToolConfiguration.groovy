@@ -7,15 +7,15 @@ import org.bson.types.ObjectId
 @Entity
 @Resource(readOnly = false, formats = ['json', 'xml'])
 class ToolConfiguration {
-    ObjectId id
-    Project project
+    //ObjectId id
+    //Project project
     Repository repository
     String toolName
     List<String> processNames
     Map parameters
 
     static constraints = {
-        project nullable: false
+        //project nullable: false
         processNames nullable: false
         repository nullable: false
     }

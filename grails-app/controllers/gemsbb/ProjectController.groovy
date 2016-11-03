@@ -7,6 +7,7 @@ import static org.springframework.http.HttpStatus.OK
 import grails.rest.*
 import grails.converters.*
 import grails.transaction.Transactional
+import org.bson.types.ObjectId
 
 @Transactional(readOnly = true)
 class ProjectController {
@@ -14,8 +15,29 @@ class ProjectController {
     static allowedMethods = [save: "POST", update: "PUT", index: "GET"]
 
     def index(Integer max) {
-        params.max = Math.min(max ?: 10, 100)
-        respond Project.list(params), model:[projectCount: Project.count()]
+        def queryParams = params
+        queryParams.max = Math.min(max ?: 10, 100)
+        def query = Project.where {}
+
+        if(params.toolName != null) {
+            query = query.where {
+                toolsConfiguration.toolName == queryParams.toolName
+            }
+        }
+
+        if(params.organizationId != null) {
+            query = query.where {
+                organization == new ObjectId(params.organizationId)
+            }
+        }
+
+        if(params.processName != null) {
+            query = query.where {
+                toolsConfiguration.processNames == queryParams.processName
+            }
+        }
+
+        respond  query.findAll(), model:[projectCount: query.count()]
     }
 
     def show(Project project) {

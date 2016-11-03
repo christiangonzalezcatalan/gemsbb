@@ -17,7 +17,7 @@ class ProjectMetricController {
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)
 
-        if(params.projectId != null &&params.name != null && params.month != null && params.year != null) {
+        if(params.projectId != null && params.name != null && params.month != null && params.year != null) {
             def rparams = params
             def query = ProjectMetric.where {
                 project.id == new ObjectId(params.projectId) &&
